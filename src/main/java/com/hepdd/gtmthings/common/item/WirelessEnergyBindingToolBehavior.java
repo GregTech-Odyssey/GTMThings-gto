@@ -17,11 +17,33 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 
+import com.hepdd.gtmthings.api.capability.IEnergyRateMachine;
 import com.hepdd.gtmthings.api.misc.WirelessEnergyContainer;
 
 import java.math.BigInteger;
 
 public class WirelessEnergyBindingToolBehavior implements IInteractionItem {
+
+    public static long getRate(BlockGetter level, BlockPos pos) {
+        long rate = 0;
+        if (level != null) {
+            MetaMachine machine = MetaMachine.getMachine(level, pos);
+            if (machine instanceof IEnergyRateMachine energyRateMachine) {
+                rate = energyRateMachine.getEnergyRate();
+            } else if (machine instanceof BatteryBufferMachine batteryBufferMachine) {
+                CustomItemStackHandler inv = batteryBufferMachine.getBatteryInventory();
+                for (int i = 0; i < inv.getSlots(); i++) {
+                    IElectricItem electricItem = GTCapabilityHelper.getElectricItem(inv.getStackInSlot(i));
+                    if (electricItem != null) {
+                        rate += GTValues.VEX[electricItem.getTier()];
+                    }
+                }
+            } else if (machine instanceof PowerSubstationMachine powerSubstationMachine && powerSubstationMachine.isFormed()) {
+                rate = powerSubstationMachine.getEnergyInfo().capacity().divide(BigInteger.valueOf(4096)).longValue();
+            }
+        }
+        return rate;
+    }
 
     @Override
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
@@ -36,24 +58,5 @@ public class WirelessEnergyBindingToolBehavior implements IInteractionItem {
             return InteractionResult.CONSUME;
         }
         return InteractionResult.PASS;
-    }
-
-    public static long getRate(BlockGetter level, BlockPos pos) {
-        long rate = 0;
-        if (level != null) {
-            MetaMachine machine = MetaMachine.getMachine(level, pos);
-            if (machine instanceof BatteryBufferMachine batteryBufferMachine) {
-                CustomItemStackHandler inv = batteryBufferMachine.getBatteryInventory();
-                for (int i = 0; i < inv.getSlots(); i++) {
-                    IElectricItem electricItem = GTCapabilityHelper.getElectricItem(inv.getStackInSlot(i));
-                    if (electricItem != null) {
-                        rate += GTValues.VEX[electricItem.getTier()];
-                    }
-                }
-            } else if (machine instanceof PowerSubstationMachine powerSubstationMachine && powerSubstationMachine.isFormed()) {
-                rate = powerSubstationMachine.getEnergyInfo().capacity().divide(BigInteger.valueOf(4096)).longValue();
-            }
-        }
-        return rate;
     }
 }
