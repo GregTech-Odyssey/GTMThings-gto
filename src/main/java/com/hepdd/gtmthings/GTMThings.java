@@ -1,9 +1,5 @@
 package com.hepdd.gtmthings;
 
-import com.gregtechceu.gtceu.api.GTCEuAPI;
-import com.gregtechceu.gtceu.api.cover.CoverDefinition;
-import com.gregtechceu.gtceu.api.machine.MachineDefinition;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -27,19 +23,5 @@ public class GTMThings {
     public GTMThings(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
         GTMTHINGS_REGISTRATE.registerEventListeners(modEventBus);
-        modEventBus.addGenericListener(MachineDefinition.class, this::registerMachines);
-        modEventBus.addGenericListener(CoverDefinition.class, this::registerCovers);
-    }
-
-    private void registerMachines(GTCEuAPI.RegisterEvent<ResourceLocation, MachineDefinition> event) {
-        CreativeMachines.init();
-        WirelessMachines.init();
-        CustomMachines.init();
-    }
-
-    private void registerCovers(GTCEuAPI.RegisterEvent<ResourceLocation, CoverDefinition> event) {
-        CreativeModeTabs.init();
-        GTMTCovers.init();
-        CustomItems.init();
     }
 }

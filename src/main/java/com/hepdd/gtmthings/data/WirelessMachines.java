@@ -19,7 +19,7 @@ import static com.hepdd.gtmthings.common.registry.GTMTRegistration.GTMTHINGS_REG
 public class WirelessMachines {
 
     static {
-        GTMTHINGS_REGISTRATE.creativeModeTab(() -> CreativeModeTabs.MORE_MACHINES);
+        GTMTHINGS_REGISTRATE.defaultCreativeTab(CreativeModeTabs.MORE_MACHINES);
     }
 
     public static final MachineDefinition WIRELESS_ENERGY_MONITOR = GTMTHINGS_REGISTRATE

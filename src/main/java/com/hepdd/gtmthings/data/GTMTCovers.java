@@ -20,7 +20,7 @@ import static com.hepdd.gtmthings.common.registry.GTMTRegistration.GTMTHINGS_REG
 public class GTMTCovers {
 
     static {
-        GTMTHINGS_REGISTRATE.creativeModeTab(() -> CreativeModeTabs.MORE_MACHINES);
+        GTMTHINGS_REGISTRATE.defaultCreativeTab(CreativeModeTabs.MORE_MACHINES);
     }
     public static final int[] ALL_TIERS = GTValues.tiersBetween(GTValues.LV,
             GTCEuAPI.isHighTier() ? GTValues.OpV : GTValues.UV);

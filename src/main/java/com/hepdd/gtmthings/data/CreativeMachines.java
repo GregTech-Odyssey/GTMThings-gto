@@ -33,7 +33,7 @@ import static com.hepdd.gtmthings.common.registry.GTMTRegistration.GTMTHINGS_REG
 public class CreativeMachines {
 
     static {
-        GTMTHINGS_REGISTRATE.creativeModeTab(() -> CreativeModeTabs.CREATIVE_TAB);
+        GTMTHINGS_REGISTRATE.defaultCreativeTab(CreativeModeTabs.CREATIVE_TAB);
     }
 
     public static final MachineDefinition CREATIVE_FLUID_INPUT_HATCH = GTMTHINGS_REGISTRATE.machine(

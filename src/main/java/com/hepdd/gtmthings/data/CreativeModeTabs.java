@@ -1,7 +1,5 @@
 package com.hepdd.gtmthings.data;
 
-import com.gregtechceu.gtceu.common.data.GTCreativeModeTabs;
-
 import net.minecraft.world.item.CreativeModeTab;
 
 import com.hepdd.gtmthings.GTMThings;
@@ -14,7 +12,6 @@ public class CreativeModeTabs {
 
     public static final RegistryEntry<CreativeModeTab> CREATIVE_TAB = GTMTHINGS_REGISTRATE
             .defaultCreativeTab("creative", builder -> builder
-                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator("creative", GTMTHINGS_REGISTRATE))
                     .title(GTMTHINGS_REGISTRATE.addLang("itemGroup", GTMThings.id("creative"), GTMThings.NAME))
                     .icon(CREATIVE_ENERGY::asStack)
                     .build())
@@ -22,7 +19,6 @@ public class CreativeModeTabs {
 
     public static final RegistryEntry<CreativeModeTab> MORE_MACHINES = GTMTHINGS_REGISTRATE
             .defaultCreativeTab("more_machines", builder -> builder
-                    .displayItems(new GTCreativeModeTabs.RegistrateDisplayItemsGenerator("more_machines", GTMTHINGS_REGISTRATE))
                     .title(GTMTHINGS_REGISTRATE.addLang("itemGroup", GTMThings.id("more_machines"), GTMThings.NAME))
                     .icon(CustomMachines.ME_EXPORT_BUFFER::asStack)
                     .build())
