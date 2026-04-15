@@ -10,12 +10,12 @@ import com.gregtechceu.gtceu.common.item.TooltipBehavior;
 
 import net.minecraft.network.chat.Component;
 
+import com.gto.registrate.util.entry.ItemEntry;
+import com.gto.registrate.util.nullness.NonNullConsumer;
 import com.hepdd.gtmthings.client.VirtualItemProviderRenderer;
 import com.hepdd.gtmthings.common.item.*;
 import com.hepdd.gtmthings.common.item.Behaviour.WirelessTransferCoverPlaceBehavior;
 import com.hepdd.gtmthings.common.item.Behaviour.WirelessTransferCoverTooltipBehavior;
-import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
 import java.util.Locale;
 

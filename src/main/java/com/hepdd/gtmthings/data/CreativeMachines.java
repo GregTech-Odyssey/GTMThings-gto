@@ -17,14 +17,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import com.gto.registrate.providers.ProviderType;
+import com.gto.registrate.util.entry.ItemEntry;
+import com.gto.registrate.util.nullness.NonNullBiConsumer;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.CreativeEnergyHatchPartMachine;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.CreativeInputBusPartMachine;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.CreativeInputHatchPartMachine;
 import com.hepdd.gtmthings.common.block.machine.multiblock.part.CreativeLaserHatchPartMachine;
 import com.hepdd.gtmthings.common.item.CreativeFluidStats;
-import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 
 import static com.gregtechceu.gtceu.api.GTValues.*;
 import static com.gregtechceu.gtceu.common.data.GTItems.attach;

@@ -2,8 +2,8 @@ package com.hepdd.gtmthings.data;
 
 import net.minecraft.world.item.CreativeModeTab;
 
+import com.gto.registrate.util.entry.RegistryEntry;
 import com.hepdd.gtmthings.GTMThings;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import static com.gregtechceu.gtceu.common.data.GTMachines.CREATIVE_ENERGY;
 import static com.hepdd.gtmthings.common.registry.GTMTRegistration.GTMTHINGS_REGISTRATE;

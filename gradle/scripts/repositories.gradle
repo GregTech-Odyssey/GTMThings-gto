@@ -40,12 +40,6 @@ repositories {
         }
     }
     maven {
-        url = "https://maven.tterrag.com/"
-        content {
-            includeGroup("com.tterrag.registrate")
-        }
-    }
-    maven {
         url = "https://maven.blamejared.com/"
     }
     maven {
