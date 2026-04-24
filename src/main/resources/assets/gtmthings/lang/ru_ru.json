@@ -43,7 +43,7 @@
   "gtmthings.machine.wireless_energy_monitor.button.net": "[Итог]",
   "gtmthings.machine.wireless_energy_monitor.button.input": "[Вход]",
   "gtmthings.machine.wireless_energy_monitor.button.output": "[Выход]",
-  "gtmthings.machine.wireless_energy_interface.tooltip": "Receives energy and sends it to the power network",
+  "gtmthings.machine.wireless_energy_interface.tooltip": "Принимает энергию и отправляет её в энергосеть",
   "gtmthings.machine.wireless_energy_cover.tooltip.1": "Беспроводной приёмник энергии отвязан!",
   "gtmthings.machine.wireless_energy_cover.tooltip.2": "Беспроводной приемник энергии привязан к: %s",
   "gtmthings.machine.wireless_energy_cover.tooltip.3": "Беспроводной приемник энергии привязан к неизвестному пользователю: %s",
