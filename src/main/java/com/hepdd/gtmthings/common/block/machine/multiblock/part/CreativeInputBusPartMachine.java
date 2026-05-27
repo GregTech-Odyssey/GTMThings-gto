@@ -278,8 +278,8 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
         }
 
         @Override
-        public void handleRecipeItem(IO io, GTRecipe recipe, List<Content<ItemIngredient>> left, boolean simulate) {
-            super.handleRecipeItem(io, recipe, left, true);
+        public boolean handleRecipeItem(IO io, GTRecipe recipe, List<Content<ItemIngredient>> left, boolean simulate) {
+            return super.handleRecipeItem(io, recipe, left, true);
         }
     }
 }

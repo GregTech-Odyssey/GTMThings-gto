@@ -211,8 +211,8 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
         }
 
         @Override
-        public void handleRecipeFluid(IO io, GTRecipe recipe, List<Content<FluidIngredient>> left, boolean simulate) {
-            super.handleRecipeFluid(io, recipe, left, true);
+        public boolean handleRecipeFluid(IO io, GTRecipe recipe, List<Content<FluidIngredient>> left, boolean simulate) {
+            return super.handleRecipeFluid(io, recipe, left, true);
         }
     }
 }
