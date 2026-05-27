@@ -2,7 +2,6 @@ package com.hepdd.gtmthings.common.block.machine.multiblock.part;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -13,6 +12,8 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.WorkableTieredIOPartMac
 import com.gregtechceu.gtceu.api.machine.trait.CircuitHandler;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableItemStackHandler;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.content.Content;
+import com.gregtechceu.gtceu.api.recipe.handler.IO;
 import com.gregtechceu.gtceu.api.recipe.ingredient.ItemIngredient;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 
@@ -23,6 +24,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
+import com.gto.datasynclib.annotations.SyncToClient;
 import com.hepdd.gtmthings.api.misc.UnlimitedItemStackTransfer;
 import com.lowdragmc.lowdraglib.gui.widget.PhantomSlotWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
@@ -64,6 +67,11 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     @Persisted
     private final ItemStackTransfer creativeStorage;
     protected ArrayList<Item> lstItem;
+
+    @Getter
+    @SaveToDisk
+    @SyncToClient
+    private boolean isDistinct = false;
 
     public CreativeInputBusPartMachine(MetaMachineBlockEntity holder, Function<Integer, ItemStackTransfer> transferFactory) {
         super(holder, GTValues.MAX, IO.IN);
@@ -107,20 +115,14 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     }
 
     @Override
-    public boolean isDistinct() {
-        return getInventory().isDistinct() && circuitInventory.isDistinct();
-    }
-
-    @Override
     public void setDistinct(boolean isDistinct) {
-        getInventory().setDistinct(isDistinct);
-        circuitInventory.setDistinct(isDistinct);
-        getHandlerList().setDistinctAndNotify(isDistinct);
+        this.isDistinct = isDistinct;
+        getHandlerUnit().setDistinctAndNotify(isDistinct);
     }
 
     @Override
     public void onPaintingColorChanged(int color) {
-        getHandlerList().setColor(color, true);
+        getHandlerUnit().setColor(color, true);
     }
 
     protected void autoKeep() {
@@ -276,8 +278,8 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
         }
 
         @Override
-        public List<ItemIngredient> handleRecipeInner(IO io, GTRecipe recipe, List<ItemIngredient> left, boolean simulate) {
-            return super.handleRecipeInner(io, recipe, left, true);
+        public void handleRecipeItem(IO io, GTRecipe recipe, List<Content<ItemIngredient>> left, boolean simulate) {
+            super.handleRecipeItem(io, recipe, left, true);
         }
     }
 }

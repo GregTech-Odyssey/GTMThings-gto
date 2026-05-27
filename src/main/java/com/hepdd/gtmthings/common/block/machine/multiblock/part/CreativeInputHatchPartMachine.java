@@ -2,7 +2,6 @@ package com.hepdd.gtmthings.common.block.machine.multiblock.part;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
-import com.gregtechceu.gtceu.api.capability.recipe.IO;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.widget.PhantomFluidWidget;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
@@ -11,16 +10,21 @@ import com.gregtechceu.gtceu.api.machine.feature.multiblock.IDistinctPart;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.WorkableTieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableFluidTank;
 import com.gregtechceu.gtceu.api.recipe.GTRecipe;
+import com.gregtechceu.gtceu.api.recipe.content.Content;
+import com.gregtechceu.gtceu.api.recipe.handler.IO;
 import com.gregtechceu.gtceu.api.recipe.ingredient.FluidIngredient;
 import com.gregtechceu.gtceu.api.transfer.fluid.CustomFluidTank;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
+import com.gto.datasynclib.annotations.SyncToClient;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -41,6 +45,11 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
     private final Int2ObjectOpenHashMap<FluidStack> fluidMap;
     @Persisted
     private final CustomFluidTank[] creativeTanks;
+
+    @Getter
+    @SaveToDisk
+    @SyncToClient
+    private boolean isDistinct = false;
 
     // The `Object... args` parameter is necessary in case a superclass needs to pass any args along to createTank().
     // We can't use fields here because those won't be available while createTank() is called.
@@ -76,7 +85,7 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
 
     @Override
     public void onPaintingColorChanged(int color) {
-        getHandlerList().setColor(color, true);
+        getHandlerUnit().setColor(color, true);
     }
 
     @Override
@@ -190,13 +199,9 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
     }
 
     @Override
-    public boolean isDistinct() {
-        return this.tank.isDistinct();
-    }
-
-    @Override
     public void setDistinct(boolean isDistinct) {
-        this.tank.setDistinct(isDistinct);
+        this.isDistinct = isDistinct;
+        getHandlerUnit().setDistinctAndNotify(isDistinct);
     }
 
     private static class InfinityFluidTank extends NotifiableFluidTank {
@@ -206,8 +211,8 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
         }
 
         @Override
-        public List<FluidIngredient> handleRecipeInner(IO io, GTRecipe recipe, List<FluidIngredient> left, boolean simulate) {
-            return super.handleRecipeInner(io, recipe, left, true);
+        public void handleRecipeFluid(IO io, GTRecipe recipe, List<Content<FluidIngredient>> left, boolean simulate) {
+            super.handleRecipeFluid(io, recipe, left, true);
         }
     }
 }
