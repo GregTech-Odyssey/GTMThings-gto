@@ -31,7 +31,6 @@ import com.lowdragmc.lowdraglib.gui.widget.PhantomSlotWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.misc.ItemStackTransfer;
-import com.lowdragmc.lowdraglib.syncdata.ISubscription;
 import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.utils.Position;
 import lombok.Getter;
@@ -59,8 +58,7 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     private final NotifiableItemStackHandler inventory;
     @Nullable
     protected TickableSubscription autoIOSubs;
-    @Nullable
-    protected ISubscription inventorySubs;
+
     @Getter
     @Persisted
     protected final NotifiableItemStackHandler circuitInventory;
@@ -102,16 +100,10 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
                 lstItem.add(is.getItem());
             }
         }
-        updateInventorySubscription();
-    }
-
-    @Override
-    public void onUnload() {
-        super.onUnload();
-        if (inventorySubs != null) {
-            inventorySubs.unsubscribe();
-            inventorySubs = null;
+        if (isDistinct) {
+            getHandlerUnit().setDistinct(true);
         }
+        updateInventorySubscription();
     }
 
     @Override

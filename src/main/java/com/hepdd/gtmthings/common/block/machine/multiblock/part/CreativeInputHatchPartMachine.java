@@ -80,17 +80,15 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
                 fluidMap.put(i, this.creativeTanks[i].getFluid());
             }
         }
+        if (isDistinct) {
+            getHandlerUnit().setDistinct(true);
+        }
         updateTankSubscription();
     }
 
     @Override
     public void onPaintingColorChanged(int color) {
         getHandlerUnit().setColor(color, true);
-    }
-
-    @Override
-    public void onUnload() {
-        super.onUnload();
     }
 
     protected void updateTankSubscription() {
