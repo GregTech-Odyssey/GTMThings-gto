@@ -84,11 +84,6 @@ public class WirelessOpticalComputationHatchMachine extends WorkableMultiblockPa
     }
 
     @Override
-    public long getMaxCWU() {
-        return computationContainer.getMaxCWU();
-    }
-
-    @Override
     public boolean canBridge() {
         return computationContainer.canBridge();
     }

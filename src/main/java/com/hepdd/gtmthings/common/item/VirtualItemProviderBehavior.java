@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.gui.fancy.TabsWidget;
 import com.gregtechceu.gtceu.api.gui.widget.SlotWidget;
 import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
+import com.gregtechceu.gtceu.api.transfer.item.ICustomItemStackHandler;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +20,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import com.hepdd.gtmthings.data.CustomItems;
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
@@ -113,7 +113,7 @@ public final class VirtualItemProviderBehavior implements IAddInformation, IItem
         return CustomItems.VIRTUAL_ITEM_PROVIDER.get().getDescription();
     }
 
-    private static class ItemHandler implements IItemHandlerModifiable {
+    private static class ItemHandler implements ICustomItemStackHandler {
 
         private ItemStack getItem() {
             return entityPlayer.getItemInHand(hand);
