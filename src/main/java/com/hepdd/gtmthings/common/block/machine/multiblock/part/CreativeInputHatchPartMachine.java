@@ -22,7 +22,6 @@ import com.gto.datasynclib.annotations.SaveToDisk;
 import com.gto.datasynclib.annotations.SyncToClient;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
@@ -37,13 +36,13 @@ public class CreativeInputHatchPartMachine extends WorkableTieredIOPartMachine i
 
     private final int SLOT_COUNT = 9;
 
-    @Persisted
+    @SaveToDisk
     public final NotifiableFluidTank tank;
     private final int slots;
     @Nullable
     protected TickableSubscription autoIOSubs;
     private final Int2ObjectOpenHashMap<FluidStack> fluidMap;
-    @Persisted
+    @SaveToDisk
     private final CustomFluidTank[] creativeTanks;
 
     @Getter

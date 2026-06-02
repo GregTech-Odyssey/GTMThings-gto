@@ -9,6 +9,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
 import com.hepdd.gtmthings.api.gui.widget.AlignComponentPanelWidget;
 import com.hepdd.gtmthings.api.gui.widget.AlignLabelWidget;
 import com.hepdd.gtmthings.api.gui.widget.FixedDraggableScrollableWidgetGroup;
@@ -17,7 +18,6 @@ import com.hepdd.gtmthings.common.item.IWirelessMonitor;
 import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
 import com.lowdragmc.lowdraglib.gui.util.ClickData;
 import com.lowdragmc.lowdraglib.gui.widget.*;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -46,10 +46,10 @@ public class WirelessEnergyMonitor extends MetaMachine implements IFancyUIMachin
 
     private List<Component> textListCache;
 
-    @Persisted
+    @SaveToDisk
     private boolean all;
 
-    @Persisted
+    @SaveToDisk
     private int powerDisplayMode;
 
     //////////////////////////////////////

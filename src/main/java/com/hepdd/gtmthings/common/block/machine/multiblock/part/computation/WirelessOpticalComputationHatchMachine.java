@@ -17,9 +17,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
 import com.hepdd.gtmthings.api.capability.IGTMTJadeIF;
 import com.hepdd.gtmthings.common.block.machine.trait.WirelessNotifiableComputationContainer;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 
 import javax.annotation.Nullable;
@@ -32,10 +32,10 @@ public class WirelessOpticalComputationHatchMachine extends WorkableMultiblockPa
 
     private final boolean transmitter;
 
-    @Persisted
+    @SaveToDisk
     @Nullable
     private BlockPos transmitterPos;
-    @Persisted
+    @SaveToDisk
     @Nullable
     private BlockPos receiverPos;
     protected WirelessNotifiableComputationContainer computationContainer;

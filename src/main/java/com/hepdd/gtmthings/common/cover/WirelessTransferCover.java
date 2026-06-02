@@ -9,6 +9,7 @@ import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
+import com.gregtechceu.gtceu.core.ILevel;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -25,8 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
 import com.hepdd.gtmthings.api.misc.BlockEntityCache;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -42,18 +43,17 @@ public class WirelessTransferCover extends CoverBehavior {
     public static final int TRANSFER_ITEM = 1;
     public static final int TRANSFER_FLUID = 2;
 
-    @Persisted
     protected final int transferType;
     private TickableSubscription subscription;
     protected ServerLevel targetLever;
-    @Persisted
+    @SaveToDisk
     private String dimensionId;
-    @Persisted
+    @SaveToDisk
     protected BlockPos targetPos;
-    @Persisted
+    @SaveToDisk
     protected Direction facing;
 
-    private final BlockEntityCache target = new BlockEntityCache(() -> targetLever.getBlockEntity(targetPos));
+    private final BlockEntityCache target = new BlockEntityCache(() -> ILevel.getCachedBlockEntity(targetLever, targetPos));
 
     public WirelessTransferCover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide, int transferType) {
         super(definition, coverHolder, attachedSide);

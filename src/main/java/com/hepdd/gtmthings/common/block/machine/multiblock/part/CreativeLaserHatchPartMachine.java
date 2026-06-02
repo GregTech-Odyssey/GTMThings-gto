@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.utils.GTUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
 import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -24,7 +25,6 @@ import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.SelectorWidget;
 import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
 import com.lowdragmc.lowdraglib.syncdata.ISubscription;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -42,18 +42,18 @@ import static net.minecraft.ChatFormatting.*;
 @ParametersAreNonnullByDefault
 public class CreativeLaserHatchPartMachine extends WorkableTieredIOPartMachine implements IDataInfoProvider {
 
-    @Persisted
+    @SaveToDisk
     private final NotifiableLaserContainer buffer;
     @Nullable
     protected ISubscription LaserListener;
     protected TickableSubscription explosionSubs;
     private Long maxEnergy;
-    @Persisted
+    @SaveToDisk
     private long voltage = 0;
-    @Persisted
+    @SaveToDisk
     @Getter
     private int amps = 256;
-    @Persisted
+    @SaveToDisk
     private int setTier = GTValues.IV;
 
     public static final String[] VNF = new String[] {

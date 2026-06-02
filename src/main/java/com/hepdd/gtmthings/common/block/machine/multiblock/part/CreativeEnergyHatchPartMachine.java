@@ -19,6 +19,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
 import com.lowdragmc.lowdraglib.gui.editor.ColorPattern;
 import com.lowdragmc.lowdraglib.gui.modular.ModularUI;
 import com.lowdragmc.lowdraglib.gui.texture.GuiTextureGroup;
@@ -28,7 +29,6 @@ import com.lowdragmc.lowdraglib.gui.widget.ButtonWidget;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.SelectorWidget;
 import com.lowdragmc.lowdraglib.gui.widget.TextFieldWidget;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,16 +44,16 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class CreativeEnergyHatchPartMachine extends WorkableTieredIOPartMachine implements IDataInfoProvider {
 
-    @Persisted
+    @SaveToDisk
     public final NotifiableEnergyContainer energyContainer;
-    @Persisted
+    @SaveToDisk
     private long maxEnergy;
-    @Persisted
+    @SaveToDisk
     private long voltage = 0;
-    @Persisted
+    @SaveToDisk
     @Getter
     private int amps = 1;
-    @Persisted
+    @SaveToDisk
     private int setTier = 0;
 
     public CreativeEnergyHatchPartMachine(MetaMachineBlockEntity holder) {

@@ -19,7 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
+import com.gto.datasynclib.annotations.SaveToDisk;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,13 +34,13 @@ public class CreativeEnergyCover extends CoverBehavior {
 
     private static final int MAX_AMPERAGE = 16;
 
-    @Persisted
+    @SaveToDisk
     private long energyPerTick;
-    @Persisted
+    @SaveToDisk
     private int tier;
-    @Persisted
+    @SaveToDisk
     private int amperage;
-    @Persisted
+    @SaveToDisk
     private long machineMaxEnergy;
 
     public CreativeEnergyCover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide) {

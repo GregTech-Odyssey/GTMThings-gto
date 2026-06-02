@@ -14,6 +14,7 @@ import com.gregtechceu.gtceu.api.machine.SimpleTieredMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.FluidHatchPartMachine;
 import com.gregtechceu.gtceu.common.machine.multiblock.part.ItemBusPartMachine;
+import com.gregtechceu.gtceu.core.ILevel;
 import com.gregtechceu.gtceu.utils.GTTransferUtils;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -32,12 +33,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 
+import com.gto.datasynclib.annotations.SaveToDisk;
+import com.gto.datasynclib.annotations.SyncToClient;
 import com.hepdd.gtmthings.api.misc.BlockEntityCache;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.syncdata.annotation.DescSynced;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,27 +56,26 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
     public static final int TRANSFER_ITEM = 1;
     public static final int TRANSFER_FLUID = 2;
 
-    @Persisted
     protected final int transferType;
     private TickableSubscription subscription;
     protected ServerLevel targetLever;
-    @Persisted
+    @SaveToDisk
     private String dimensionId;
-    @Persisted
+    @SaveToDisk
     protected BlockPos targetPos;
-    @Persisted
+    @SaveToDisk
     protected Direction facing;
 
-    @Persisted
-    @DescSynced
+    @SaveToDisk
+    @SyncToClient
     @Getter
     protected final FilterHandler<FluidStack, FluidFilter> filterHandlerFluid;
-    @Persisted
-    @DescSynced
+    @SaveToDisk
+    @SyncToClient
     @Getter
     protected final FilterHandler<ItemStack, ItemFilter> filterHandlerItem;
 
-    private final BlockEntityCache target = new BlockEntityCache(() -> targetLever.getBlockEntity(targetPos));
+    private final BlockEntityCache target = new BlockEntityCache(() -> ILevel.getCachedBlockEntity(targetLever, targetPos));
 
     public AdvancedWirelessTransferCover(CoverDefinition definition, ICoverable coverHolder, Direction attachedSide, int transferType) {
         super(definition, coverHolder, attachedSide);

@@ -31,7 +31,6 @@ import com.lowdragmc.lowdraglib.gui.widget.PhantomSlotWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
 import com.lowdragmc.lowdraglib.misc.ItemStackTransfer;
-import com.lowdragmc.lowdraglib.syncdata.annotation.Persisted;
 import com.lowdragmc.lowdraglib.utils.Position;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -54,15 +53,15 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     private final int ITEM_SIZE = 5;
 
     @Getter
-    @Persisted
+    @SaveToDisk
     private final NotifiableItemStackHandler inventory;
     @Nullable
     protected TickableSubscription autoIOSubs;
 
     @Getter
-    @Persisted
+    @SaveToDisk
     protected final NotifiableItemStackHandler circuitInventory;
-    @Persisted
+    @SaveToDisk
     private final ItemStackTransfer creativeStorage;
     protected ArrayList<Item> lstItem;
 
