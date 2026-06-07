@@ -8,6 +8,7 @@ import com.gregtechceu.gtceu.api.machine.multiblock.part.WorkableMultiblockPartM
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -186,6 +187,11 @@ public class WirelessOpticalComputationHatchMachine extends WorkableMultiblockPa
             player.sendSystemMessage(Component.translatable("gtmthings.machine.wireless_computation_hatch.binded"));
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean testCapability(@org.jetbrains.annotations.Nullable Direction side) {
         return false;
     }
 }

@@ -7,7 +7,6 @@ import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IDataInfoProvider;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.WorkableTieredIOPartMachine;
 import com.gregtechceu.gtceu.api.machine.trait.NotifiableEnergyContainer;
-import com.gregtechceu.gtceu.api.pattern.MultiblockWorldData;
 import com.gregtechceu.gtceu.api.recipe.handler.IO;
 import com.gregtechceu.gtceu.common.item.PortableScannerBehavior;
 import com.gregtechceu.gtceu.utils.GTUtil;
@@ -136,17 +135,7 @@ public class CreativeEnergyHatchPartMachine extends WorkableTieredIOPartMachine 
         if (getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.getServer().execute(() -> {
                 for (var c : getControllers()) {
-                    if (c.isFormed()) {
-                        c.getPatternLock().lock();
-                        try {
-                            c.onStructureInvalid();
-                            var mwsd = MultiblockWorldData.getOrCreate(serverLevel);
-                            mwsd.removeMapping(c.getMultiblockState());
-                            mwsd.addAsyncLogic(c);
-                        } finally {
-                            c.getPatternLock().unlock();
-                        }
-                    }
+                    c.requestCheck();
                 }
             });
         }

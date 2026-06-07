@@ -2,7 +2,6 @@ package com.hepdd.gtmthings.common.item;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.capability.GTCapabilityHelper;
-import com.gregtechceu.gtceu.api.capability.IElectricItem;
 import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
@@ -45,7 +44,7 @@ public class WirelessEnergyBindingToolBehavior implements IInteractionItem {
             if (machine instanceof BatteryBufferMachine batteryBufferMachine) {
                 CustomItemStackHandler inv = batteryBufferMachine.getBatteryInventory();
                 for (int i = 0; i < inv.getSlots(); i++) {
-                    IElectricItem electricItem = GTCapabilityHelper.getElectricItem(inv.getStackInSlot(i));
+                    var electricItem = GTCapabilityHelper.getElectricItem(inv.getStackInSlot(i));
                     if (electricItem != null) {
                         rate += GTValues.VEX[electricItem.getTier()];
                     }

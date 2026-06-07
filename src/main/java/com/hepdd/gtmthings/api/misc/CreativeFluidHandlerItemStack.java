@@ -1,6 +1,6 @@
 package com.hepdd.gtmthings.api.misc;
 
-import com.gregtechceu.gtceu.api.capability.IThermalFluidHandlerItemStack;
+import com.gregtechceu.gtceu.api.capability.item.IThermalFluidHandlerItemStack;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

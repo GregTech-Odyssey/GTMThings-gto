@@ -2,6 +2,7 @@ package com.hepdd.gtmthings.common.block.machine.electric;
 
 import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
+import com.gregtechceu.gtceu.api.capability.GTCapability;
 import com.gregtechceu.gtceu.api.machine.feature.IInteractedMachine;
 import com.gregtechceu.gtceu.api.machine.feature.IMachineLife;
 import com.gregtechceu.gtceu.api.machine.multiblock.part.TieredIOPartMachine;
@@ -49,6 +50,14 @@ public class WirelessEnergyInterface extends TieredIOPartMachine implements IInt
     public WirelessEnergyInterface(MetaMachineBlockEntity holder) {
         super(holder, GTValues.MAX, IO.IN);
         this.energyContainer = new Interface(this);
+    }
+
+    @Override
+    public @Nullable <T> T getGTCapability(Class<T> cap, @Nullable Direction side) {
+        if (cap == GTCapability.ENERGY_CONTAINER && side == null || side == getFrontFacing()) {
+            return cap.cast(energyContainer);
+        }
+        return super.getGTCapability(cap, side);
     }
 
     @Override
