@@ -24,10 +24,12 @@ public class TeamUtil {
             return FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
         }
         if (FTBTeamsAPI.api().isClientManagerLoaded()) {
-            return FTBTeamsAPI.api().getClientManager().getTeams().stream()
+            var matchingTeam = FTBTeamsAPI.api().getClientManager().getTeams().stream()
                     .filter(team -> team.getMembers().contains(playerUUID))
-                    .filter(Team::isPartyTeam)
                     .findFirst();
+            if (matchingTeam.isPresent() && matchingTeam.get().isPartyTeam()) {
+                return matchingTeam;
+            }
         }
         return Optional.empty();
     }

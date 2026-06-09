@@ -20,6 +20,14 @@ if ($teamUtil -cnotmatch 'public static Component GetName\(Level level, UUID pla
     throw 'Legacy GetName(Level, UUID) should remain as a compatibility delegate.'
 }
 
+if ($teamUtil -cnotmatch '\.filter\(team -> team\.getMembers\(\)\.contains\(playerUUID\)\)\s*\.findFirst\(\)') {
+    throw 'Client FTB Teams lookup should keep the legacy first matching team order.'
+}
+
+if ($teamUtil -cmatch '\.filter\(Team::isPartyTeam\)\s*\.findFirst\(\)') {
+    throw 'Client FTB Teams lookup should not skip earlier non-party matches in a compatibility refactor.'
+}
+
 $sourceFiles = Get-ChildItem -Path (Join-Path $repoRoot 'src\main\java') -Recurse -Filter '*.java'
 foreach ($file in $sourceFiles) {
     if ($file.FullName -eq (Resolve-Path $teamUtilPath).Path) {
