@@ -102,7 +102,7 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
             var intY = tag.getInt("y");
             var intZ = tag.getInt("z");
             this.targetPos = new BlockPos(intX, intY, intZ);
-            this.facing = Direction.byName(tag.getString("facing"));
+            this.facing = readFacingOrFallback(tag.getString("facing"), attachedSide);
             getTargetLevel();
         }
         var targetMachine = MetaMachine.getMachine(coverHolder.holder());
@@ -132,6 +132,7 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
     @Override
     public void onLoad() {
         super.onLoad();
+        getSafeFacing();
         getTargetLevel();
         subscription = coverHolder.subscribeServerTick(subscription, this::update, 20);
     }
@@ -173,7 +174,7 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
 
     protected @Nullable IItemHandler getTargetItemTransfer() {
         if (targetLever == null || targetPos == null) return null;
-        return GTCapabilityHelper.getItemHandler(target.get(), facing.getOpposite());
+        return GTCapabilityHelper.getItemHandler(target.get(), getSafeFacing().getOpposite());
     }
 
     protected @Nullable IFluidHandler getOwnFluidTransfer() {
@@ -182,7 +183,21 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
 
     protected @Nullable IFluidHandler getTargetFluidTransfer() {
         if (targetLever == null || targetPos == null) return null;
-        return GTCapabilityHelper.getFluidHandler(target.get(), facing.getOpposite());
+        return GTCapabilityHelper.getFluidHandler(target.get(), getSafeFacing().getOpposite());
+    }
+
+    private Direction getSafeFacing() {
+        this.facing = sanitizeFacing(this.facing, attachedSide);
+        return this.facing;
+    }
+
+    static Direction readFacingOrFallback(@Nullable String facingName, @Nullable Direction fallback) {
+        return sanitizeFacing(facingName == null ? null : Direction.byName(facingName), fallback);
+    }
+
+    static Direction sanitizeFacing(@Nullable Direction direction, @Nullable Direction fallback) {
+        if (direction != null) return direction;
+        return fallback != null ? fallback : Direction.NORTH;
     }
 
     @Override
