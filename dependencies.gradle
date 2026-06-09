@@ -1,5 +1,7 @@
 dependencies {
     compileOnly libs.jetbrains.annotations
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation("dev:fastcollection-1.0")
 
