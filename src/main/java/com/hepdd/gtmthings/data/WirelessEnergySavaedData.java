@@ -19,6 +19,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * @deprecated Use {@link WirelessEnergySavedData}. The misspelled class still owns
+ *             {@link #INSTANCE} so existing compiled integrations keep sharing the same saved data.
+ */
+@Deprecated(forRemoval = false)
 public class WirelessEnergySavaedData extends SavedData {
 
     public static WirelessEnergySavaedData INSTANCE = new WirelessEnergySavaedData();
@@ -47,6 +52,9 @@ public class WirelessEnergySavaedData extends SavedData {
         return compoundTag;
     }
 
+    /**
+     * Restores one team's wireless energy container from persisted NBT.
+     */
     protected WirelessEnergyContainer readTag(CompoundTag engTag) {
         UUID uuid = engTag.getUUID("uuid");
         String en = engTag.getString("energy");
@@ -56,6 +64,9 @@ public class WirelessEnergySavaedData extends SavedData {
         return new WirelessEnergyContainer(uuid, energy, rate, bindPos);
     }
 
+    /**
+     * Serializes one wireless energy container, omitting empty entries to keep saved data compact.
+     */
     protected CompoundTag toTag(WirelessEnergyContainer container) {
         CompoundTag engTag = new CompoundTag();
         BigInteger storage = container.getStorage();
