@@ -192,6 +192,6 @@ public class WirelessOpticalComputationHatchMachine extends WorkableMultiblockPa
 
     @Override
     public boolean testCapability(@org.jetbrains.annotations.Nullable Direction side) {
-        return false;
+        return side == null || side == getFrontFacing();
     }
 }
