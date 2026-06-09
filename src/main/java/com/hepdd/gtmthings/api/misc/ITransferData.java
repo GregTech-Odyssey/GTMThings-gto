@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static com.hepdd.gtmthings.utils.FormatUtil.*;
-import static com.hepdd.gtmthings.utils.TeamUtil.GetName;
+import static com.hepdd.gtmthings.utils.TeamUtil.getName;
 
 public interface ITransferData {
 
@@ -28,8 +28,10 @@ public interface ITransferData {
         MetaMachine machine = machine();
         long eut = Throughput();
         String pos = machine.getPos().toShortString();
+        Component owner = Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", getName(machine.getLevel(), UUID()));
+        Component location = Component.translatable("recipe.condition.dimension.tooltip", machine.getLevel().dimension().location()).append(" [").append(pos).append("] ").append(owner);
         return Component.translatable(machine.getBlockState().getBlock().getDescriptionId())
-                .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("recipe.condition.dimension.tooltip", machine.getLevel().dimension().location()).append(" [").append(pos).append("] ").append(Component.translatable("gtmthings.machine.wireless_energy_monitor.tooltip.0", GetName(machine.getLevel(), UUID()))))))
+                .withStyle(Style.EMPTY.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, location)))
                 .append((eut > 0 ? " +" : " ") + formatBigDecimalNumberOrSic(BigDecimal.valueOf(eut))).append(" EU/t (").append(GTValues.VNF[GTUtil.getFloorTierByVoltage(Math.abs(eut))]).append(")")
                 .append(ComponentPanelWidget.withButton(Component.literal(" [ ] "), pos));
     }

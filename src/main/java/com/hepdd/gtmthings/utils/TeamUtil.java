@@ -16,51 +16,46 @@ public class TeamUtil {
 
     private static final boolean isFTBTeamsLoaded = GTCEu.isModLoaded("ftbteams");
 
+    private static Optional<Team> getTeam(UUID playerUUID) {
+        if (!isFTBTeamsLoaded) {
+            return Optional.empty();
+        }
+        if (FTBTeamsAPI.api().isManagerLoaded()) {
+            return FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
+        }
+        if (FTBTeamsAPI.api().isClientManagerLoaded()) {
+            return FTBTeamsAPI.api().getClientManager().getTeams().stream()
+                    .filter(team -> team.getMembers().contains(playerUUID))
+                    .filter(Team::isPartyTeam)
+                    .findFirst();
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the FTB Teams party id for the player when teams are available, or the
+     * player's own UUID when teams are not loaded or no party team exists.
+     */
     public static UUID getTeamUUID(UUID playerUUID) {
-        if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
-            var team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
-            return team.map(Team::getTeamId).orElse(playerUUID);
-        } else if (isFTBTeamsLoaded && FTBTeamsAPI.api().isClientManagerLoaded()) {
-            // Multiplayer client-side
-            var team = FTBTeamsAPI.api().getClientManager().getTeams().stream().filter(
-                    t -> t.getMembers().contains(playerUUID)).findFirst();
-            if (team.isPresent() && team.get().isPartyTeam()) {
-                return team.get().getTeamId();
-            }
-        }
-
-        return playerUUID;
+        return getTeam(playerUUID).map(Team::getTeamId).orElse(playerUUID);
     }
 
-    public static Component GetName(Player player) {
-        if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
-            Optional<Team> team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(player.getUUID());
-            if (team.isPresent()) return team.get().getName();
-        } else if (isFTBTeamsLoaded && FTBTeamsAPI.api().isClientManagerLoaded()) {
-            // Multiplayer client-side
-            var team = FTBTeamsAPI.api().getClientManager().getTeams().stream().filter(
-                    t -> t.getMembers().contains(player.getUUID())).findFirst();
-            if (team.isPresent() && team.get().isPartyTeam()) {
-                return team.get().getName();
-            }
-        }
-
-        return player.getName();
+    /**
+     * Returns the display name of the player's FTB Teams party when available,
+     * otherwise falls back to the player's own display name.
+     */
+    public static Component getName(Player player) {
+        return getTeam(player.getUUID()).map(Team::getName).orElseGet(player::getName);
     }
 
-    public static Component GetName(Level level, UUID playerUUID) {
-        if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
-            var team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
-            if (team.isPresent()) {
-                return team.get().getName();
-            }
-        } else if (isFTBTeamsLoaded && FTBTeamsAPI.api().isClientManagerLoaded()) {
-            // Multiplayer client-side
-            var team = FTBTeamsAPI.api().getClientManager().getTeams().stream().filter(
-                    t -> t.getMembers().contains(playerUUID)).findFirst();
-            if (team.isPresent() && team.get().isPartyTeam()) {
-                return team.get().getName();
-            }
+    /**
+     * Returns the display name for the UUID's FTB Teams party, online player, or the
+     * UUID text when neither can be resolved.
+     */
+    public static Component getName(Level level, UUID playerUUID) {
+        var team = getTeam(playerUUID);
+        if (team.isPresent()) {
+            return team.get().getName();
         }
 
         Player player = level.getPlayerByUUID(playerUUID);
@@ -68,21 +63,26 @@ public class TeamUtil {
         return Component.literal(playerUUID.toString());
     }
 
-    public static boolean hasOwner(Level level, UUID playerUUID) {
-        if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
-            var team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
-            if (team.isPresent()) {
-                return true;
-            }
-        } else if (isFTBTeamsLoaded && FTBTeamsAPI.api().isClientManagerLoaded()) {
-            // Multiplayer client-side
-            var team = FTBTeamsAPI.api().getClientManager().getTeams().stream().filter(
-                    t -> t.getMembers().contains(playerUUID)).findFirst();
-            if (team.isPresent() && team.get().isPartyTeam()) {
-                return true;
-            }
-        }
+    /**
+     * @deprecated use {@link #getName(Player)}.
+     */
+    @Deprecated(forRemoval = false)
+    public static Component GetName(Player player) {
+        return getName(player);
+    }
 
-        return (level.getPlayerByUUID(playerUUID) != null);
+    /**
+     * @deprecated use {@link #getName(Level, UUID)}.
+     */
+    @Deprecated(forRemoval = false)
+    public static Component GetName(Level level, UUID playerUUID) {
+        return getName(level, playerUUID);
+    }
+
+    /**
+     * Returns true when the UUID can be resolved to an FTB Teams party or an online player.
+     */
+    public static boolean hasOwner(Level level, UUID playerUUID) {
+        return getTeam(playerUUID).isPresent() || level.getPlayerByUUID(playerUUID) != null;
     }
 }
