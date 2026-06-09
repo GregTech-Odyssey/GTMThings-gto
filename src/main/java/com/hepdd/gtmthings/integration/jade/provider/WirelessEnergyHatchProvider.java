@@ -21,7 +21,7 @@ import snownee.jade.api.config.IPluginConfig;
 
 import java.util.UUID;
 
-import static com.hepdd.gtmthings.utils.TeamUtil.GetName;
+import static com.hepdd.gtmthings.utils.TeamUtil.getName;
 import static com.hepdd.gtmthings.utils.TeamUtil.hasOwner;
 import static net.minecraft.resources.ResourceLocation.tryBuild;
 
@@ -72,9 +72,9 @@ public class WirelessEnergyHatchProvider extends CapabilityBlockProvider<IBindab
             UUID uuid = capData.getUUID("uuid");
             if (hasOwner(block.getLevel(), uuid)) {
                 if (cover) {
-                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_cover.tooltip.2", GetName(block.getLevel(), uuid)));
+                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_cover.tooltip.2", getName(block.getLevel(), uuid)));
                 } else {
-                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.2", GetName(block.getLevel(), uuid)));
+                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.2", getName(block.getLevel(), uuid)));
                 }
             } else {
                 if (cover) {

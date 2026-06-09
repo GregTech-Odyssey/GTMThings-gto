@@ -16,6 +16,9 @@ public class TeamUtil {
 
     private static final boolean isFTBTeamsLoaded = GTCEu.isModLoaded("ftbteams");
 
+    /**
+     * Returns the shared team UUID when FTB Teams is available, otherwise the player UUID.
+     */
     public static UUID getTeamUUID(UUID playerUUID) {
         if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
             var team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
@@ -32,7 +35,10 @@ public class TeamUtil {
         return playerUUID;
     }
 
-    public static Component GetName(Player player) {
+    /**
+     * Returns the display name for the player's team when available, otherwise the player name.
+     */
+    public static Component getName(Player player) {
         if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
             Optional<Team> team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(player.getUUID());
             if (team.isPresent()) return team.get().getName();
@@ -48,7 +54,10 @@ public class TeamUtil {
         return player.getName();
     }
 
-    public static Component GetName(Level level, UUID playerUUID) {
+    /**
+     * Returns the display name for a team/player UUID in the supplied level.
+     */
+    public static Component getName(Level level, UUID playerUUID) {
         if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
             var team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
             if (team.isPresent()) {
@@ -68,6 +77,9 @@ public class TeamUtil {
         return Component.literal(playerUUID.toString());
     }
 
+    /**
+     * Returns true when the UUID resolves to a loaded team or an online player.
+     */
     public static boolean hasOwner(Level level, UUID playerUUID) {
         if (isFTBTeamsLoaded && FTBTeamsAPI.api().isManagerLoaded()) {
             var team = FTBTeamsAPI.api().getManager().getTeamForPlayerID(playerUUID);
@@ -84,5 +96,15 @@ public class TeamUtil {
         }
 
         return (level.getPlayerByUUID(playerUUID) != null);
+    }
+
+    @Deprecated(forRemoval = false)
+    public static Component GetName(Player player) {
+        return getName(player);
+    }
+
+    @Deprecated(forRemoval = false)
+    public static Component GetName(Level level, UUID playerUUID) {
+        return getName(level, playerUUID);
     }
 }
