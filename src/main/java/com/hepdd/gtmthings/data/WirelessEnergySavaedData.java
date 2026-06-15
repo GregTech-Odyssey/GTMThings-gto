@@ -10,12 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.saveddata.SavedData;
 
-import com.fast.fastcollection.O2OOpenCacheHashMap;
+import com.gto.fastcollection.O2OOpenCacheHashMap;
 import com.hepdd.gtmthings.api.misc.WirelessEnergyContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,7 +22,7 @@ public class WirelessEnergySavaedData extends SavedData {
 
     public static WirelessEnergySavaedData INSTANCE = new WirelessEnergySavaedData();
 
-    public final Map<UUID, WirelessEnergyContainer> containerMap = new O2OOpenCacheHashMap<>();
+    public final O2OOpenCacheHashMap<UUID, WirelessEnergyContainer> containerMap = new O2OOpenCacheHashMap<>();
 
     public WirelessEnergySavaedData() {}
 

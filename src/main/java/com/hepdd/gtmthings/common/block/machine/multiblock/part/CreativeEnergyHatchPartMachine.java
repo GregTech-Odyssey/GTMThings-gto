@@ -13,7 +13,6 @@ import com.gregtechceu.gtceu.utils.GTUtil;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -73,8 +72,8 @@ public class CreativeEnergyHatchPartMachine extends WorkableTieredIOPartMachine 
     }
 
     @Override
-    public void loadCustomPersistedData(@NotNull CompoundTag tag) {
-        super.loadCustomPersistedData(tag);
+    public void onLoad() {
+        super.onLoad();
         updateEnergyContainer();
     }
 
