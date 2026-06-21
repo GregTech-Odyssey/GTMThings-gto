@@ -16,4 +16,8 @@ public interface IBindable {
     default boolean display() {
         return true;
     }
+
+    default boolean preferTeamName() {
+        return false;
+    }
 }

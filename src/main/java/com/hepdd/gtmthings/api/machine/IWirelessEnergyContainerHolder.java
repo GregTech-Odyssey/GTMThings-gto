@@ -7,6 +7,11 @@ import javax.annotation.Nullable;
 
 public interface IWirelessEnergyContainerHolder extends IBindable {
 
+    @Override
+    default boolean preferTeamName() {
+        return true;
+    }
+
     void setWirelessEnergyContainerCache(WirelessEnergyContainer container);
 
     WirelessEnergyContainer getWirelessEnergyContainerCache();

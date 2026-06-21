@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import com.hepdd.gtmthings.GTMThings;
 import com.hepdd.gtmthings.api.capability.IBindable;
+import com.hepdd.gtmthings.utils.TeamUtil;
 import org.jetbrains.annotations.Nullable;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.ITooltip;
@@ -21,8 +22,6 @@ import snownee.jade.api.config.IPluginConfig;
 
 import java.util.UUID;
 
-import static com.hepdd.gtmthings.utils.TeamUtil.GetName;
-import static com.hepdd.gtmthings.utils.TeamUtil.hasOwner;
 import static net.minecraft.resources.ResourceLocation.tryBuild;
 
 public class WirelessEnergyHatchProvider extends CapabilityBlockProvider<IBindable> {
@@ -55,6 +54,7 @@ public class WirelessEnergyHatchProvider extends CapabilityBlockProvider<IBindab
             data.putBoolean("isBindable", true);
             data.putUUID("uuid", capability.getUUID());
             data.putBoolean("cover", capability.cover());
+            data.putBoolean("preferTeamName", capability.preferTeamName());
         }
     }
 
@@ -70,11 +70,15 @@ public class WirelessEnergyHatchProvider extends CapabilityBlockProvider<IBindab
             }
         } else {
             UUID uuid = capData.getUUID("uuid");
-            if (hasOwner(block.getLevel(), uuid)) {
+            boolean preferTeamName = capData.getBoolean("preferTeamName");
+            Component ownerName = preferTeamName ?
+                    TeamUtil.findTeamOrPlayerName(block.getLevel(), uuid) :
+                    TeamUtil.findPlayerOrTeamName(block.getLevel(), uuid);
+            if (ownerName != null) {
                 if (cover) {
-                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_cover.tooltip.2", GetName(block.getLevel(), uuid)));
+                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_cover.tooltip.2", ownerName));
                 } else {
-                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.2", GetName(block.getLevel(), uuid)));
+                    tooltip.add(Component.translatable("gtmthings.machine.wireless_energy_hatch.tooltip.2", ownerName));
                 }
             } else {
                 if (cover) {
