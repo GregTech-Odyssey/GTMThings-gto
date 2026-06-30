@@ -4,6 +4,7 @@ repositories {
         dir 'libs'
     }
     mavenCentral()
+    maven { url = 'https://maven.gtodyssey.com/releases' }
     maven {
         name = 'GTCEu Maven'
         url = 'https://maven.gtceu.com'

@@ -1,20 +1,20 @@
 package com.hepdd.gtmthings.api.misc;
 
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
+import com.gregtechceu.gtceu.datasynclib.GTDataFixer;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.ItemHandlerHelper;
 
-import lombok.Setter;
+import com.gto.datasynclib.datasream.data.Data;
+import com.gto.datasynclib.datasream.data.ListData;
+import com.gto.datasynclib.datasream.data.NullData;
+import com.gto.datasynclib.util.DataCodecs;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Predicate;
-
-import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.List;
 
 public class UnlimitedItemStackTransfer extends CustomItemStackHandler {
 
@@ -30,38 +30,6 @@ public class UnlimitedItemStackTransfer extends CustomItemStackHandler {
         super(stack);
     }
 
-    @Setter
-    private Predicate<ItemStack> filter;
-
-    @Override
-    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return filter == null || filter.test(stack);
-    }
-
-    @Override
-    @NotNull
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (amount == 0) return ItemStack.EMPTY;
-        ItemStack existing = this.stacks[slot];
-        int count = existing.getCount();
-        if (count < 1) return ItemStack.EMPTY;
-        if (count <= amount) {
-            if (!simulate) {
-                this.stacks[slot] = ItemStack.EMPTY;
-                onContentsChanged(slot);
-                return existing;
-            } else {
-                return existing.copy();
-            }
-        } else {
-            if (!simulate) {
-                existing.setCount(count - amount);
-                onContentsChanged(slot);
-            }
-            return ItemHandlerHelper.copyStackWithSize(existing, amount);
-        }
-    }
-
     @Override
     public int getSlotLimit(int slot) {
         return Integer.MAX_VALUE;
@@ -73,37 +41,49 @@ public class UnlimitedItemStackTransfer extends CustomItemStackHandler {
     }
 
     @Override
-    public CompoundTag serializeNBT() {
-        ListTag nbtTagList = new ListTag();
-        for (int i = 0; i < size; i++) {
-            if (!stacks[i].isEmpty()) {
+    public Data writeData() {
+        ListData list = new ListData();
+        if (this.isInputLimited) list.addNull();
+        ItemStack[] stacks = this.stacks;
+        for (int i = 0; i < this.size; ++i) {
+            ItemStack stack = stacks[i];
+            if (!stack.isEmpty()) {
                 CompoundTag itemTag = new CompoundTag();
+                var count = stack.getCount();
                 itemTag.putInt("Slot", i);
-                var is = stacks[i].copy();
-                itemTag.putInt("realCount", is.getCount());
-                is.setCount(1);
-                is.save(itemTag);
-                nbtTagList.add(itemTag);
+                itemTag.putInt("realCount", count);
+                stack.setCount(1);
+                stack.save(itemTag);
+                stack.setCount(count);
+                list.add(DataCodecs.COMPOUND_TAG_CODEC.encode(itemTag));
             }
         }
-        CompoundTag nbt = new CompoundTag();
-        nbt.put("Items", nbtTagList);
-        nbt.putInt("Size", size);
-        return nbt;
+        return list.isEmpty() ? NullData.INSTANCE : list;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        setSize(nbt.contains("Size", Tag.TAG_INT) ? nbt.getInt("Size") : size);
-        ListTag tagList = nbt.getList("Items", Tag.TAG_COMPOUND);
-        for (int i = 0; i < tagList.size(); i++) {
-            CompoundTag itemTags = tagList.getCompound(i);
-            int slot = itemTags.getInt("Slot");
-
-            if (slot >= 0 && slot < size) {
-                var is = ItemStack.of(itemTags).copy();
-                is.setCount(itemTags.getInt("realCount"));
-                stacks[slot] = is;
+    public void readData(@NotNull Data data, int dataVersion) {
+        if (dataVersion < 1) {
+            GTDataFixer.decodeCustomItemStackHandler(this, data, dataVersion);
+        } else {
+            ItemStack[] stacks = this.stacks;
+            Arrays.fill(stacks, ItemStack.EMPTY);
+            if (data == NullData.INSTANCE) return;
+            List<Data> list = data.getList();
+            int size = list.size();
+            int i = 0;
+            if (list.getFirst() == NullData.INSTANCE) {
+                isInputLimited = true;
+                ++i;
+            }
+            for (; i < size; ++i) {
+                var item = DataCodecs.COMPOUND_TAG_CODEC.decode(list.get(i));
+                int slot = item.getInt("Slot");
+                if (slot >= 0 && slot < size) {
+                    var stack = ItemStack.of(item);
+                    stack.setCount(item.getInt("realCount"));
+                    stacks[slot] = stack;
+                }
             }
         }
     }

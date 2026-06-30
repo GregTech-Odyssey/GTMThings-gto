@@ -6,7 +6,6 @@ import com.gregtechceu.gtceu.api.item.component.IInteractionItem;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.transfer.item.CustomItemStackHandler;
 import com.gregtechceu.gtceu.common.machine.electric.BatteryBufferMachine;
-import com.gregtechceu.gtceu.common.machine.multiblock.electric.PowerSubstationMachine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -16,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 
+import com.hepdd.gtmthings.api.machine.IPowerSubstationMachine;
 import com.hepdd.gtmthings.api.misc.WirelessEnergyContainer;
 
 import java.math.BigInteger;
@@ -49,7 +49,7 @@ public class WirelessEnergyBindingToolBehavior implements IInteractionItem {
                         rate += GTValues.VEX[electricItem.getTier()];
                     }
                 }
-            } else if (machine instanceof PowerSubstationMachine powerSubstationMachine && powerSubstationMachine.isFormed()) {
+            } else if (machine instanceof IPowerSubstationMachine powerSubstationMachine && powerSubstationMachine.isFormed()) {
                 rate = powerSubstationMachine.getEnergyInfo().capacity().divide(BigInteger.valueOf(4096)).longValue();
             }
         }
