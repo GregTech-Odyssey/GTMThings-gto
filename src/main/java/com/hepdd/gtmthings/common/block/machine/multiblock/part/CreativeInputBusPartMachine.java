@@ -4,6 +4,7 @@ import com.gregtechceu.gtceu.api.GTValues;
 import com.gregtechceu.gtceu.api.blockentity.MetaMachineBlockEntity;
 import com.gregtechceu.gtceu.api.gui.GuiTextures;
 import com.gregtechceu.gtceu.api.gui.fancy.ConfiguratorPanel;
+import com.gregtechceu.gtceu.api.gui.widget.PhantomSlotWidget;
 import com.gregtechceu.gtceu.api.machine.MetaMachine;
 import com.gregtechceu.gtceu.api.machine.TickableSubscription;
 import com.gregtechceu.gtceu.api.machine.fancyconfigurator.CircuitFancyConfigurator;
@@ -27,10 +28,8 @@ import net.minecraft.world.item.ItemStack;
 import com.gto.datasynclib.annotations.SaveToDisk;
 import com.gto.datasynclib.annotations.SyncToClient;
 import com.hepdd.gtmthings.api.misc.UnlimitedItemStackTransfer;
-import com.lowdragmc.lowdraglib.gui.widget.PhantomSlotWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
-import com.lowdragmc.lowdraglib.misc.ItemStackTransfer;
 import com.lowdragmc.lowdraglib.utils.Position;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +61,7 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     @SaveToDisk
     protected final NotifiableItemStackHandler circuitInventory;
     @SaveToDisk
-    private final ItemStackTransfer creativeStorage;
+    private final CustomItemStackHandler creativeStorage;
     protected ArrayList<Item> lstItem;
 
     @Getter
@@ -70,7 +69,7 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     @SyncToClient
     private boolean isDistinct = false;
 
-    public CreativeInputBusPartMachine(MetaMachineBlockEntity holder, Function<Integer, ItemStackTransfer> transferFactory) {
+    public CreativeInputBusPartMachine(MetaMachineBlockEntity holder, Function<Integer, CustomItemStackHandler> transferFactory) {
         super(holder, GTValues.MAX, IO.IN);
         this.inventory = createInventory();
         this.circuitInventory = CircuitHandler.create(this);
@@ -79,7 +78,7 @@ public class CreativeInputBusPartMachine extends WorkableTieredIOPartMachine imp
     }
 
     public CreativeInputBusPartMachine(MetaMachineBlockEntity holder) {
-        this(holder, ItemStackTransfer::new);
+        this(holder, CustomItemStackHandler::new);
     }
 
     protected int getInventorySize() {

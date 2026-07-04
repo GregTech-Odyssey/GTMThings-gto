@@ -12,6 +12,7 @@ import net.minecraft.network.chat.Component;
 
 import com.gto.registrate.util.entry.ItemEntry;
 import com.gto.registrate.util.nullness.NonNullConsumer;
+import com.hepdd.gtmthings.client.VirtualFluidProviderRenderer;
 import com.hepdd.gtmthings.client.VirtualItemProviderRenderer;
 import com.hepdd.gtmthings.common.item.*;
 import com.hepdd.gtmthings.common.item.Behaviour.WirelessTransferCoverPlaceBehavior;
@@ -33,6 +34,12 @@ public class CustomItems {
             .properties(p -> p.stacksTo(1))
             .onRegister(attach(VirtualItemProviderBehavior.INSTANCE))
             .onRegister(attachRenderer(() -> VirtualItemProviderRenderer.INSTANCE))
+            .register();
+
+    public static final ItemEntry<ComponentItem> VIRTUAL_FLUID_PROVIDER = GTMTHINGS_REGISTRATE.item("virtual_fluid_provider", ComponentItem::create)
+            .properties(p -> p.stacksTo(1))
+            .onRegister(attach(VirtualFluidProviderBehavior.INSTANCE))
+            .onRegister(attachRenderer(() -> VirtualFluidProviderRenderer.INSTANCE))
             .register();
 
     public static final ItemEntry<ComponentItem> PROGRAMMABLE_COVER = GTMTHINGS_REGISTRATE.item("programmable_cover", ComponentItem::create)

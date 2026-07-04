@@ -119,6 +119,7 @@
   "item.gtmthings.advanced_terminal.setting.5.tooltip": "是否使用AE物品(0:不使用,1:使用)\n使用AE物品开启后，会通过背包中的AE终端连接到相应的AE网络并使用其中的物品来进行建造。",
   "item.gtmthings.wireless_energy_binding_tool": "无线能源绑定工具",
   "item.gtmthings.virtual_item_provider": "虚拟物品提供器",
+  "item.gtmthings.virtual_fluid_provider": "虚拟流体提供器",
   "item.gtmthings.creative_energy_cover": "创造能源覆盖板",
   "item.gtmthings.programmable_cover": "可编程覆盖板",
   "item.gtmthings.wireless_energy_terminal": "无线能源终端",

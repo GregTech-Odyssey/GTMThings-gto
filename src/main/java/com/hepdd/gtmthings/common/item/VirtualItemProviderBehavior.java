@@ -9,7 +9,6 @@ import com.gregtechceu.gtceu.api.item.component.IAddInformation;
 import com.gregtechceu.gtceu.api.item.component.IItemUIFactory;
 import com.gregtechceu.gtceu.api.transfer.item.ICustomItemStackHandler;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +17,10 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import com.hepdd.gtmthings.data.CustomItems;
 import com.lowdragmc.lowdraglib.gui.factory.HeldItemUIFactory;
@@ -47,7 +48,7 @@ public final class VirtualItemProviderBehavior implements IAddInformation, IItem
             tag.remove("m");
             tag.putString("n", "air");
         } else {
-            ResourceLocation id = BuiltInRegistries.ITEM.getKey(virtualItem.getItem());
+            ResourceLocation id = ForgeRegistries.ITEMS.getKey(virtualItem.getItem());
             tag.putString("m", id.getNamespace());
             tag.putString("n", id.getPath());
             CompoundTag itemTag = virtualItem.getTag();
@@ -56,14 +57,15 @@ public final class VirtualItemProviderBehavior implements IAddInformation, IItem
         return stack;
     }
 
-    public static ItemStack getVirtualItem(ItemStack item) {
-        CompoundTag tag = item.getOrCreateTag();
-        String mod = tag.getString("m");
-        if (mod.isEmpty()) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack stack = BuiltInRegistries.ITEM.get(tryBuild(mod, tag.getString("n"))).getDefaultInstance();
-        if (tag.contains("t")) stack.setTag((CompoundTag) tag.get("t"));
+    public static ItemStack getVirtualItem(ItemStack stack) {
+        var tag = stack.getTag();
+        if (tag == null) return ItemStack.EMPTY;
+        var mod = tag.getString("m");
+        if (mod.isEmpty()) return ItemStack.EMPTY;
+        var item = ForgeRegistries.ITEMS.getValue(tryBuild(mod, tag.getString("n")));
+        if (item == null || item == Items.AIR) return ItemStack.EMPTY;
+        stack = item.getDefaultInstance();
+        if (tag.get("t") instanceof CompoundTag compoundTag) stack.setTag(compoundTag);
         return stack;
     }
 
@@ -170,7 +172,7 @@ public final class VirtualItemProviderBehavior implements IAddInformation, IItem
 
         @Override
         public boolean isItemValid(int i, @NotNull ItemStack arg) {
-            return true;
+            return !entityPlayer.isLocalPlayer() && !arg.is(CustomItems.VIRTUAL_ITEM_PROVIDER.get());
         }
     }
 }
