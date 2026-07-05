@@ -36,6 +36,7 @@ import net.minecraftforge.items.IItemHandler;
 import com.gto.datasynclib.annotations.SaveToDisk;
 import com.gto.datasynclib.annotations.SyncToClient;
 import com.hepdd.gtmthings.api.misc.BlockEntityCache;
+import com.hepdd.gtmthings.api.misc.WirelessTransferBindIndex;
 import com.lowdragmc.lowdraglib.gui.widget.LabelWidget;
 import com.lowdragmc.lowdraglib.gui.widget.Widget;
 import com.lowdragmc.lowdraglib.gui.widget.WidgetGroup;
@@ -115,6 +116,7 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
             fluidHatchPartMachine.setWorkingEnabled(false);
         }
         super.onAttached(itemStack, player);
+        WirelessTransferBindIndex.register(this, targetPos, dimensionId, transferType);
     }
 
     @Override
@@ -134,12 +136,20 @@ public class AdvancedWirelessTransferCover extends CoverBehavior implements IUIC
         super.onLoad();
         getSafeFacing();
         getTargetLevel();
+        WirelessTransferBindIndex.register(this, targetPos, dimensionId, transferType);
         subscription = coverHolder.subscribeServerTick(subscription, this::update, 20);
+    }
+
+    @Override
+    public void onUnload() {
+        super.onUnload();
+        WirelessTransferBindIndex.unregister(this, targetPos, dimensionId);
     }
 
     @Override
     public void onRemoved() {
         super.onRemoved();
+        WirelessTransferBindIndex.unregister(this, targetPos, dimensionId);
         if (subscription != null) {
             subscription.unsubscribe();
         }
