@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -33,11 +34,11 @@ public class FormatUtil {
         if (number < 1000) {
             return String.valueOf(number);
         } else if (number < 1_000_000) {
-            return String.format("%.1fK", number / 1000.0);
+            return String.format(Locale.ROOT, "%.1fK", number / 1000.0);
         } else if (number < 1_000_000_000) {
-            return String.format("%.2fM", number / 1_000_000.0);
+            return String.format(Locale.ROOT, "%.2fM", number / 1_000_000.0);
         } else {
-            return String.format("%.2fG", number / 1_000_000_000.0);
+            return String.format(Locale.ROOT, "%.2fG", number / 1_000_000_000.0);
         }
     }
 
@@ -71,11 +72,18 @@ public class FormatUtil {
     }
 
     public static String getSpacer(Font font, String splitChar, int spaceLength) {
-        int spacerCount = spaceLength / font.width(splitChar);
+        if (spaceLength <= 0 || splitChar == null || splitChar.isEmpty()) {
+            return " ";
+        }
+        int splitWidth = font.width(splitChar);
+        if (splitWidth <= 0) {
+            return " ";
+        }
+        int spacerCount = spaceLength / splitWidth;
         while (font.width(splitChar.repeat(spacerCount) + " ") <= spaceLength) {
             spacerCount++;
         }
-        return splitChar.repeat(spacerCount - 2) + " ";
+        return splitChar.repeat(Math.max(0, spacerCount - 2)) + " ";
     }
 
     public static List<FormattedCharSequence> formatJustifyComponent(FormattedText component, int maxWidth, Font font, String splitChar) {
