@@ -14,7 +14,6 @@ import com.gto.datasynclib.util.DataCodecs;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class UnlimitedItemStackTransfer extends CustomItemStackHandler {
 
@@ -49,12 +48,9 @@ public class UnlimitedItemStackTransfer extends CustomItemStackHandler {
             ItemStack stack = stacks[i];
             if (!stack.isEmpty()) {
                 CompoundTag itemTag = new CompoundTag();
-                var count = stack.getCount();
                 itemTag.putInt("Slot", i);
-                itemTag.putInt("realCount", count);
-                stack.setCount(1);
-                stack.save(itemTag);
-                stack.setCount(count);
+                itemTag.putInt("realCount", stack.getCount());
+                stack.copyWithCount(1).save(itemTag);
                 list.add(DataCodecs.COMPOUND_TAG_CODEC.encode(itemTag));
             }
         }
@@ -63,25 +59,28 @@ public class UnlimitedItemStackTransfer extends CustomItemStackHandler {
 
     @Override
     public void readData(@NotNull Data data, int dataVersion) {
+        isInputLimited = false;
         if (dataVersion < 1) {
             GTDataFixer.decodeCustomItemStackHandler(this, data, dataVersion);
         } else {
             ItemStack[] stacks = this.stacks;
             Arrays.fill(stacks, ItemStack.EMPTY);
             if (data == NullData.INSTANCE) return;
-            List<Data> list = data.getList();
+            ListData list = data.asListData();
             int size = list.size();
+            if (size == 0) return;
             int i = 0;
-            if (list.getFirst() == NullData.INSTANCE) {
+            if (list.get(0) == NullData.INSTANCE) {
                 isInputLimited = true;
                 ++i;
             }
             for (; i < size; ++i) {
-                var item = DataCodecs.COMPOUND_TAG_CODEC.decode(list.get(i));
+                var item = DataCodecs.COMPOUND_TAG_CODEC.decode(list.get(i), dataVersion);
                 int slot = item.getInt("Slot");
-                if (slot >= 0 && slot < size) {
+                int count = item.getInt("realCount");
+                if (slot >= 0 && slot < this.size && count > 0) {
                     var stack = ItemStack.of(item);
-                    stack.setCount(item.getInt("realCount"));
+                    stack.setCount(count);
                     stacks[slot] = stack;
                 }
             }
